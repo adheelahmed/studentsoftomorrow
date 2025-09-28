@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile NFC Reader & Writer</title>
+<style>
+  body { font-family: sans-serif; padding: 20px; background: #f9f9f9; }
+  h1 { margin-bottom: 20px; }
+  button { padding: 10px 15px; margin: 10px 0; cursor: pointer; }
+  #output, #debugLog { margin-top: 20px; border: 1px solid #ccc; padding: 15px; border-radius: 8px; background: #fff; max-height: 400px; overflow:auto; }
+  .record { margin-bottom: 15px; padding: 10px; border: 1px dashed #888; border-radius: 5px; }
+  input { width: 100%; margin-top: 5px; padding: 5px; box-sizing: border-box; }
+  .message { margin-top: 5px; font-weight: bold; }
+  .error { color: red; }
+  .success { color: green; }
+</style>
+</head>
+<body>
+
+<h1>Mobile NFC Reader & Writer</h1>
+<button id="scanBtn">Scan NFC Tag</button>
+
+<div id="output"></div>
+
+<h2>Debug / Logs</h2>
+<div id="debugLog"></div>
+
+<script>
+const output = document.getElementById('output');
+const debugLog = document.getElementById('debugLog');
+let lastMessage = null;
+let currentReader = null;
+
+// Logging function for mobile
+function log(msg, type='log') {
+    const p = document.createElement('p');
+    p.textContent = (typeof msg === 'string') ? msg : JSON.stringify(msg, null, 2);
+    if(type==='error') p.style.color = 'red';
+    if(type==='success') p.style.color = 'green';
+    debugLog.appendChild(p);
+    debugLog.scrollTop = debugLog.scrollHeight;
+}
+
+// Decode record data
+function decodeRecordData(record) {
+  if (record.recordType === 'text') {
+    return new TextDecoder(record.encoding || 'utf-8').decode(record.data);
+  } else if (record.recordType === 'url') {
+    return new TextDecoder('utf-8').decode(record.data);
+  } else {
+    return Array.from(new Uint8Array(record.data))
+                .map(b => b.toString(16).padStart(2, '0')).join(' ');
+  }
+}
+
+// Display all records
+function displayTagRecords(message) {
+  lastMessage = message;
+  output.innerHTML = '';
+  message.records.forEach((record, index) => {
+    const recordDiv = document.createElement('div');
+    recordDiv.className = 'record';
+    recordDiv.innerHTML = `
+      <strong>Record ${index + 1}</strong><br>
+      Type: ${record.recordType}<br>
+      Media Type: ${record.mediaType || 'N/A'}<br>
+      <label>Value:</label>
+      <input type="text" value="${decodeRecordData(record)}" data-index="${index}" ${record.recordType==='text'||record.recordType==='url'?'':'readonly'}>
+      <button onclick="writeRecord(${index})" ${record.recordType==='text'||record.recordType==='url'?'':'disabled'}>Write Back</button>
+      <div class="message" id="msg-${index}"></div>
+    `;
+    output.appendChild(recordDiv);
+  });
+}
+
+// Scan NFC tag
+async function scanTag() {
+  if (!('NDEFReader' in window)) {
+    alert('Web NFC not supported on this device/browser.');
+    return;
+  }
+
+  try {
+    const ndef = new NDEFReader();
+    currentReader = ndef;
+    await ndef.scan();
+    log('Scanning for NFC tag... Tap a tag.');
+    output.innerHTML = '<p>Scanning... Tap a tag to read.</p>';
+
+    ndef.onreadingerror = () => {
+      output.innerHTML = '<p class="error">Cannot read the tag.</p>';
+      log('Reading error', 'error');
+    };
+
+    ndef.onreading = event => {
+      log('Tag detected!');
+      log(event.message);
+      displayTagRecords(event.message);
+    };
+
+  } catch(err) {
+    log('NFC error: ' + err.message, 'error');
+    output.innerHTML = <p class="error">NFC error: ${err.message}</p>;
+  }
+}
+
+async function writeRecord(index) {
+  if(!currentReader || !lastMessage) return;
+
+  const input = output.querySelector('input[data-index="${index}"]');
+  const msgDiv = output.querySelector('#msg-${index}');
+  const newValue = input.value;
+
+  try {
+    await currentReader.write({
+      records: lastMessage.records.map((rec, i) => {
+        let safeRecord = {};
+        if(i===index){
+          if(rec.recordType==='text') safeRecord = { recordType:'text', data:newValue, encoding: rec.encoding || 'utf-8' };
+          else if(rec.recordType==='url') safeRecord = { recordType:'url', data:newValue };
+          else if(rec.recordType==='mime') safeRecord = { recordType:'mime', mediaType: rec.mediaType || 'application/octet-stream', data: rec.data };
+          else safeRecord = { recordType: 'empty' };
+        } else {
+          if(rec.recordType==='text') safeRecord = { recordType:'text', data: decodeRecordData(rec), encoding: rec.encoding || 'utf-8' };
+          else if(rec.recordType==='url') safeRecord = { recordType:'url', data: decodeRecordData(rec) };
+          else if(rec.recordType==='mime') safeRecord = { recordType:'mime', mediaType: rec.mediaType || 'application/octet-stream', data: rec.data };
+          else safeRecord = { recordType: 'empty' };
+        }
+        return safeRecord;
+      })
+    });
+
+    msgDiv.textContent = 'Record updated successfully!';
+    msgDiv.className = 'message success';
+    log(`Record ${index+1} written successfully`, 'success');
+
+    // ALERT SUCCESS
+    alert(`Record ${index+1} written to NFC tag successfully!`);
+    
+  } catch(err) {
+    msgDiv.textContent = 'Failed to write record. See debug.';
+    msgDiv.className = 'message error';
+    log('Write failed: ' + err.message, 'error');
+
+    // ALERT FAILURE
+    alert(`Failed to write record ${index+1}: ${err.message}`);
+  }
+}
+
+
+document.getElementById('scanBtn').addEventListener('click', scanTag);
+</script>
+
+</body>
+</html>
