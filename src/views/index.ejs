@@ -1,0 +1,702 @@
+
+
+<% if( !inDev==false ){ %>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students of Tomorrow | 🔥</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- Ticker -->
+    <div class="ticker-wrapper">
+        <div class="ticker">
+            FREE EDUCATION FOR ALL • OPEN RESOURCES • LEARN, BUILD & CONTRIBUTE • FREE EDUCATION FOR ALL • OPEN RESOURCES • LEARN, BUILD & CONTRIBUTE • 
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="logo"></div>
+            <ul class="nav-links">
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#students">Students</a></li>
+                <li><a href="#resources">Resources</a></li>
+                <li><a href="#support">Support</a></li>
+            </ul>
+            <button class="contribute-btn">Contribute</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <h1 class="hero-title">
+                <img src="/images/stw.svg" alt="">
+            </h1>
+            <h2 class="hero-subtitle">A Free Education Movement for the Innovators of Tomorrow</h2>
+            <p class="hero-description">
+                Students of Tomorrow is a place where learners can grow using free online resources from YouTube tutorials to community guides. Everyone can learn, contribute, and share their work, building a community around free education and creativity.
+            </p>
+            
+            <div class="code-block">
+                <span class="code-line code-remove">- runs-on: traditional-education</span>
+                <span class="code-line code-add">+ runs-on: free-learning-community</span>
+            </div>
+            
+            <div class="cta-buttons">
+                <a href="#projects" class="btn-primary">Explore Projects</a>
+                <a href="#students" class="btn-secondary">Contribute</a>
+            </div>
+            
+            <p style="margin-top: 20px; font-size: 14px; color: #666;">No fees, no barriers — just learning and sharing.</p>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="features-container">
+            <div class="features-grid">
+                <div class="feature">
+                    <h3 class="feature-title">Learn by Doing</h3>
+                    <p class="feature-description">Every student creates their own folder with projects — a hands-on way to learn coding, design, and problem-solving while building a portfolio.</p>
+                </div>
+                <div class="feature">
+                    <h3 class="feature-title">Community Resources</h3>
+                    <p class="feature-description">Explore free resources, tutorials, and videos shared by educators, creators, and developers who believe in free education for all.</p>
+                </div>
+                <div class="feature">
+                    <h3 class="feature-title">Open Contribution</h3>
+                    <p class="feature-description">Fork the repo, add your work, and push. Your projects become part of a global showcase where others can learn and get inspired.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section class="portfolio-section" id="projects">
+        <div class="portfolio-container">
+            <h2 class="section-title">Student Projects</h2>
+            
+            <!-- Controls -->
+            <div class="controls">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Search projects, students, or tech..." id="searchInput">
+                </div>
+                <div class="filter-tags">
+                    <button class="filter-tag active" data-filter="all">All</button>
+                    <button class="filter-tag" data-filter="web">Web</button>
+                    <button class="filter-tag" data-filter="mobile">Mobile</button>
+                    <button class="filter-tag" data-filter="ai">AI/ML</button>
+                    <button class="filter-tag" data-filter="game">Games</button>
+                    <button class="filter-tag" data-filter="api">APIs</button>
+                </div>
+            </div>
+            
+            <!-- Portfolio Grid -->
+            <div class="portfolio-grid" id="portfolioGrid">
+                <% if (students && students.length > 0) { %>
+                  <% students.forEach(student => { %>
+                  <div class="portfolio-card" 
+                       data-category="<%= student.tools ? student.tools.join(',').toLowerCase() : '' %>" 
+                       onclick="window.location.href='<%= student.projectUrl %>'">
+                      <div class="card-header">
+                          <div class="student-info">
+                              <div class="student-avatar"><%= student.initials %></div>
+                              <div class="student-details">
+                                  <h3><%= student.studentName %></h3>
+                                  <span><%= student.profession || 'Student' %></span>
+                              </div>
+                          </div>
+                          <div class="project-title"><%= student.projectTitle %></div>
+                          <div class="project-description"><%= student.description || 'No description available.' %></div>
+                      </div>
+                      <div class="card-footer">
+                          <div class="tech-stack">
+                              <% if (student.tools && student.tools.length > 0) { %>
+                                <% student.tools.forEach(tool => { %>
+                                <span class="tech-tag-small"><%= tool %></span>
+                                <% }) %>
+                              <% } %>
+                          </div>
+                          <a href="<%= student.projectUrl %>" 
+                             class="view-btn" 
+                             onclick="event.stopPropagation()" 
+                             <% if (student.isExternal) { %>target="_blank"<% } %>>
+                             VIEW LIVE
+                          </a>
+                      </div>
+                  </div>
+                  <% }) %>
+                <% } else { %>
+                  <div style="text-align: center; padding: 40px; grid-column: 1 / -1;">
+                    <h3>No projects yet</h3>
+                    <p>Be the first to contribute! Fork the repo, add your project, and join the movement.</p>
+                  </div>
+                <% } %>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <div class="logo-shape"></div>
+                        <span class="footer-brand">STUDENTS OF TOMORROW</span>
+                    </div>
+                    <p class="footer-description">
+                        A free education initiative empowering the next generation to learn, create, and share knowledge without barriers.
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">Platform</h4>
+                    <ul class="footer-links">
+                        <li><a href="#projects">Browse Projects</a></li>
+                        <li><a href="#students">Student Directory</a></li>
+                        <li><a href="#resources">Resources</a></li>
+                        <li><a href="#console">Console</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">Community</h4>
+                    <ul class="footer-links">
+                        <li><a href="#join">Join as Student</a></li>
+                        <li><a href="#mentorship">Become an Educator</a></li>
+                        <li><a href="#events">Workshops & Events</a></li>
+                        <li><a href="#showcase">Showcase Work</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-heading">Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#docs">Documentation</a></li>
+                        <li><a href="#help">Help Center</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#feedback">Feedback</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-initiative">
+                    <p class="initiative-text">
+                        <strong>SOT, Made with coffee</strong>
+                    </p>
+                </div>
+                <div class="footer-copyright">
+                    <p>&copy; 2025 Tachyon Web Technologies. Free education, open to all.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        let currentFilter = 'all';
+        let currentSearch = '';
+        let allCards = [];
+
+        function initializeCards() {
+            allCards = Array.from(document.querySelectorAll('.portfolio-card'));
+        }
+
+        function filterAndSearchCards() {
+            const searchTerm = currentSearch.toLowerCase();
+            let visibleCount = 0;
+
+            allCards.forEach(card => {
+                const cardText = card.textContent.toLowerCase();
+                const cardCategory = card.getAttribute('data-category').toLowerCase();
+                
+                const matchesSearch = !searchTerm || cardText.includes(searchTerm);
+                const matchesFilter = currentFilter === 'all' || 
+                    cardCategory.includes(currentFilter.toLowerCase()) || 
+                    (currentFilter === 'web' && (cardCategory.includes('react') || cardCategory.includes('vue') || cardCategory.includes('javascript') || cardCategory.includes('ejs') )) ||
+                    (currentFilter === 'mobile' && (cardCategory.includes('react native') || cardCategory.includes('flutter'))) ||
+                    (currentFilter === 'ai' && (cardCategory.includes('python') || cardCategory.includes('tensorflow') || cardCategory.includes('scikit'))) ||
+                    (currentFilter === 'game' && (cardCategory.includes('unity') || cardCategory.includes('unreal'))) ||
+                    (currentFilter === 'api' && (cardCategory.includes('express') || cardCategory.includes('fastapi') || cardCategory.includes('postgresql')));
+                
+                if (matchesSearch && matchesFilter) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            const grid = document.getElementById('portfolioGrid');
+            let noResultsMsg = document.getElementById('no-results');
+            
+            if (visibleCount === 0) {
+                if (!noResultsMsg) {
+                    noResultsMsg = document.createElement('div');
+                    noResultsMsg.id = 'no-results';
+                    noResultsMsg.style.cssText = 'text-align: center; padding: 40px; grid-column: 1 / -1;';
+                    noResultsMsg.innerHTML = '<h3>No projects found</h3><p>Try adjusting your search or filters.</p>';
+                    grid.appendChild(noResultsMsg);
+                }
+                noResultsMsg.style.display = 'block';
+            } else if (noResultsMsg) {
+                noResultsMsg.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCards();
+
+            document.querySelectorAll('.filter-tag').forEach(tag => {
+                tag.addEventListener('click', function() {
+                    document.querySelector('.filter-tag.active').classList.remove('active');
+                    this.classList.add('active');
+                    currentFilter = this.getAttribute('data-filter');
+                    filterAndSearchCards();
+                });
+            });
+
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                currentSearch = e.target.value;
+                filterAndSearchCards();
+            });
+        });
+    </script>
+</body>
+
+</html>
+
+<%}else{ %>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students of Tomorrow</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-bg: #00ffc8;
+            --secondary-bg: #f0f0f0;
+            --card-bg: #ffffff;
+            --text-primary: #2d2d2d;
+            --text-secondary: #666666;
+            --accent-dark: #333333;
+            --border-light: #dddddd;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.4;
+            font-weight: 500;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Code rain effect */
+        .code-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .code-line-drop {
+            position: absolute;
+            font-size: 12px;
+            color: rgba(45, 45, 45, 0.15);
+            font-weight: 400;
+            animation: fall linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes fall {
+            from { 
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            to { 
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        /* Header with scrolling ticker */
+        .ticker-wrapper {
+            background: var(--accent-dark);
+            color: var(--primary-bg);
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 12px 0;
+            font-size: 14px;
+            font-weight: 600;
+            width: 100%;
+            position: relative;
+            z-index: 20;
+            height: 40px;
+            display: flex;
+            align-items: center;
+        }
+
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            animation: scroll 30s linear infinite;
+            line-height: 1;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Main Content */
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-title {
+            font-size: clamp(48px, 10vw, 120px);
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: -2px;
+        }
+
+        .hero-subtitle {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 40px;
+            color: var(--text-primary);
+            max-width: 600px;
+        }
+
+        /* Countdown Container */
+        .countdown-container {
+            background: var(--card-bg);
+            border: 2px solid var(--accent-dark);
+            border-radius: 8px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 8px 32px var(--shadow);
+        }
+
+        .countdown-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .countdown {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .time-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 100px;
+        }
+
+        .time-value {
+            font-size: clamp(48px, 8vw, 72px);
+            font-weight: 800;
+            color: var(--accent-dark);
+            margin-bottom: 8px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .time-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Launch Info */
+        .launch-info {
+            margin-top: 40px;
+            padding: 20px 40px;
+            background: var(--accent-dark);
+            color: var(--primary-bg);
+            border-radius: 24px;
+        }
+
+        .launch-date {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .launch-time {
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--accent-dark);
+            color: var(--primary-bg);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            margin: 20px 0;
+            max-width: 500px;
+            text-align: left;
+        }
+
+        .code-line {
+            display: block;
+            margin: 4px 0;
+        }
+
+        .code-add {
+            color: #4ade80;
+        }
+
+        .code-remove {
+            color: #f87171;
+        }
+
+        /* Footer */
+        .footer-minimal {
+            background: var(--accent-dark);
+            color: var(--primary-bg);
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .footer-minimal strong {
+            font-weight: 700;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .countdown {
+                gap: 20px;
+            }
+            
+            .countdown-container {
+                padding: 20px;
+            }
+            
+            .time-unit {
+                min-width: 80px;
+            }
+            
+            .launch-info {
+                padding: 15px 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .countdown {
+                gap: 15px;
+            }
+            
+            .time-unit {
+                min-width: 60px;
+            }
+        }
+        .hero-title img{
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Code Rain Effect -->
+    <div class="code-rain" id="codeRain"></div>
+
+    <!-- Ticker -->
+    <div class="ticker-wrapper">
+        <div class="ticker">
+            FREE EDUCATION FOR ALL • OPEN RESOURCES • LEARN, BUILD & CONTRIBUTE • FREE EDUCATION FOR ALL • OPEN RESOURCES • LEARN, BUILD & CONTRIBUTE • 
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="hero-title">
+            <img src="/images/stw.svg" alt="">
+        </h1>
+        <h2 class="hero-subtitle">A Free Education Movement for the Innovators of Tomorrow</h2>
+
+        <div class="code-block">
+            <span class="code-line code-remove">- runs-on: traditional-education</span>
+            <span class="code-line code-add">+ runs-on: free-learning-community</span>
+        </div>
+
+        <div class="countdown-container">
+            <div class="countdown-title">Launch Countdown</div>
+            <div class="countdown" id="countdown">
+                <div class="time-unit">
+                    <div class="time-value" id="days">00</div>
+                    <div class="time-label">Days</div>
+                </div>
+                <div class="time-unit">
+                    <div class="time-value" id="hours">00</div>
+                    <div class="time-label">Hours</div>
+                </div>
+                <div class="time-unit">
+                    <div class="time-value" id="minutes">00</div>
+                    <div class="time-label">Minutes</div>
+                </div>
+                <div class="time-unit">
+                    <div class="time-value" id="seconds">00</div>
+                    <div class="time-label">Seconds</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="launch-info">
+            <div class="launch-date" id="launchDate">December 31, 2025</div>
+            <div class="launch-time">The revolution goes live</div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-minimal">
+        <p><strong>SOT, Made with coffee</strong> &copy; 2025 Tachyon Web Technologies. Free education, open to all.</p>
+    </div>
+
+    <script>
+        // Set launch date - Change this to your desired launch date
+        const launchDate = new Date('2025-10-01T00:00:00Z').getTime();
+        
+        // Update launch date display
+        const launchDateElement = document.getElementById('launchDate');
+        const date = new Date(launchDate);
+        const options = { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            timeZone: 'UTC'
+        };
+        launchDateElement.textContent = date.toLocaleDateString('en-US', options);
+
+        // Countdown function
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = launchDate - now;
+
+            if (distance < 0) {
+                document.getElementById('countdown').innerHTML = `
+                    <div class="time-unit">
+                        <div class="time-value" style="color: #4ade80;">LIVE</div>
+                        <div class="time-label">Now</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        // Initialize
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // Code rain effect
+        function createCodeRain() {
+            const codeStrings = [
+                'function learn()',
+                'const future = free',
+                'while(learning)',
+                'if(passionate)',
+                'export education',
+                'import creativity',
+                'class Tomorrow',
+                'git commit',
+                'npm install',
+                'chmod +x future'
+            ];
+
+            const codeRain = document.getElementById('codeRain');
+            
+            setInterval(() => {
+                const codeLine = document.createElement('div');
+                codeLine.className = 'code-line-drop';
+                codeLine.textContent = codeStrings[Math.floor(Math.random() * codeStrings.length)];
+                codeLine.style.left = Math.random() * 100 + '%';
+                codeLine.style.animationDuration = (Math.random() * 8 + 6) + 's';
+                codeLine.style.animationDelay = Math.random() * 2 + 's';
+                
+                codeRain.appendChild(codeLine);
+                
+                setTimeout(() => {
+                    if (codeLine.parentNode) {
+                        codeLine.parentNode.removeChild(codeLine);
+                    }
+                }, 15000);
+            }, 800);
+        }
+
+        // Start code rain
+        createCodeRain();
+    </script>
+</body>
+</html>
+<%}%>

@@ -1,0 +1,8 @@
+{
+  "studentName": "Adheel Ahmed C",
+  "profession": "👾", 
+  "projectTitle": "S O T",
+  "description": "Building Students of Tomorrow (S O T) using Node.js — a platform to showcase student projects, encourage collaboration, and make free learning accessible to everyone.",
+  "tools": ["Node.js", "EJS"],
+  "isUrl": "/"
+}
