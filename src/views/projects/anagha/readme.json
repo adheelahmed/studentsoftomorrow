@@ -1,0 +1,8 @@
+{
+  "studentName": "nandana varsha anagha",
+  "profession": "student", 
+  "projectTitle": "Daily Planner App",
+  "description": "A simple browser-based planner to organize tasks by time of day. Add, mark as done, or delete tasks, with everything saved in localStorage. Includes a quick guide to deploy the app on GitHub Pages for free hosting.",
+  "tools": ["HTML", "CSS", "JavaScript", "localStorage"],
+  "isUrl": false
+}
