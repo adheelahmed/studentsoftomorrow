@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fruit Ninja 🍉</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #222;
+      overflow: hidden;
+      font-family: sans-serif;
+      color: white;
+      text-align: center;
+    }
+    canvas {
+      display: block;
+      background: #333;
+      border: 3px solid lime;
+      margin: 0 auto;
+    }
+    h1 {
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🍉 Fruit Ninja (Mini)</h1>
+  <canvas id="gameCanvas" width="600" height="600"></canvas>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let fruits = [];
+    let score = 0;
+    let lives = 3;
+    let mouseTrail = [];
+    const fruitTypes = ["🍎", "🍌", "🍓", "🍉", "🍒", "🥝"];
+
+    function spawnFruit() {
+      const radius = 20 + Math.random() * 20;
+      const x = Math.random() * (canvas.width - radius * 2) + radius;
+      const y = canvas.height + radius;
+      const vx = (Math.random() - 0.5) * 4;
+      const vy = -8 - Math.random() * 5;
+      const emoji = fruitTypes[Math.floor(Math.random() * fruitTypes.length)];
+      fruits.push({ x, y, vx, vy, radius, sliced: false, emoji });
+    }
+
+    function update() {
+      if (Math.random() < 0.02) spawnFruit();
+
+      fruits.forEach(fruit => {
+        fruit.x += fruit.vx;
+        fruit.y += fruit.vy;
+        fruit.vy += 0.2; // gravity
+
+        // Off screen check
+        if (fruit.y > canvas.height + fruit.radius && !fruit.sliced) {
+          fruit.sliced = true;
+          lives--;
+        }
+      });
+
+      fruits = fruits.filter(fruit => !fruit.sliced || fruit.y < canvas.height + fruit.radius);
+
+      // Slice detection
+      for (let i = 0; i < fruits.length; i++) {
+        for (let j = 0; j < mouseTrail.length; j++) {
+          const dx = fruits[i].x - mouseTrail[j].x;
+          const dy = fruits[i].y - mouseTrail[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < fruits[i].radius) {
+            if (!fruits[i].sliced) {
+              fruits[i].sliced = true;
+              score++;
+            }
+          }
+        }
+      }
+
+      // Clean old trail
+      if (mouseTrail.length > 20) {
+        mouseTrail.shift();
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw fruits
+      fruits.forEach(fruit => {
+        if (!fruit.sliced) {
+          ctx.font = fruit.radius + 'px serif';
+          ctx.fillText(fruit.emoji, fruit.x - fruit.radius / 2, fruit.y + fruit.radius / 2);
+        }
+      });
+
+      // Draw trail
+      ctx.strokeStyle = "white";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let i = 0; i < mouseTrail.length; i++) {
+        const point = mouseTrail[i];
+        ctx.lineTo(point.x, point.y);
+      }
+      ctx.stroke();
+
+      // Draw score/lives
+      ctx.fillStyle = "white";
+      ctx.font = "20px Arial";
+      ctx.fillText("Score: " + score, 10, 30);
+      ctx.fillText("Lives: " + lives, 10, 60);
+
+      if (lives <= 0) {
+        ctx.fillStyle = "red";
+        ctx.font = "40px Arial";
+        ctx.fillText("GAME OVER", canvas.width / 2 - 120, canvas.height / 2);
+      }
+    }
+
+    function gameLoop() {
+      if (lives > 0) {
+        update();
+      }
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+
+    // Mouse movement for slicing
+    canvas.addEventListener("mousemove", e => {
+      const rect = canvas.getBoundingClientRect();
+      mouseTrail.push({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      });
+    });
+
+    gameLoop();
+  </script>
+</body>
+</html>
