@@ -1,8 +1,8 @@
 {
-  "studentName": "Adheel Ahmed C",
-  "profession": "👾", 
-  "projectTitle": "S O T",
-  "description": "Building Students of Tomorrow (S O T) using Node.js — a platform to showcase student projects, encourage collaboration, and make free learning accessible to everyone.",
-  "tools": ["Node.js", "EJS"],
-  "isUrl": "/"
+  "studentName": "Arjush & Yadu",
+  "profession": "Students", 
+  "projectTitle": "Mobile NFC Reader & Writer",
+  "description": "A browser-based NFC tool that allows users to scan, read, and write NFC tags directly from supported mobile devices. Features live debugging logs, record editing, and real-time updates for text and URL records.",
+  "tools": ["HTML", "CSS", "JavaScript", "Web NFC API","NFC","API"],
+  "isUrl": false
 }
