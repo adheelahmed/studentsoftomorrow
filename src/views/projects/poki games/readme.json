@@ -1,8 +1,9 @@
 {
   "studentName": "Maya",
   "profession": "IT", 
-  "projectTitle": "S O T",
-  "description": "Building Students of Tomorrow (S O T) using Node.js — a platform to showcase student projects, encourage collaboration, and make free learning accessible to everyone.",
-  "tools": ["Node.js", "EJS"],
-  "isUrl": "/"
+  "projectTitle": "Fruit Ninja Clone",
+  "description": "A fast-paced Fruit Ninja–style browser game where players slice juicy fruits mid-air, rack up combos, and dodge bombs. Built in HTML, CSS, and JavaScript for quick, addictive fun right in the browser.",
+  "tools": ["HTML","GAME"],
+  "isUrl": false
+
 }
