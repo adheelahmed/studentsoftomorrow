@@ -1,0 +1,8 @@
+{
+  "studentName": "Adarsh,Aswin",
+  "profession": "students", 
+  "projectTitle": "music player",
+  "description": " for listening wide variety of songs.",
+  "tools": ["Node.js", "EJS"],
+  "isUrl": "/"
+}
