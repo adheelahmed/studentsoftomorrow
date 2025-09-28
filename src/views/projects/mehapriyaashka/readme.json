@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Deadline Slayer RPG</title>
+  <style>
+    body { margin:0; background:#111; color:#fff; text-align:center; }
+    canvas { background:#222; display:block; margin:auto; margin-top:20px; border:2px solid #fff; }
+    #ui { margin-top:10px; }
+  </style>
+</head>
+<body>
+  <h1>⚔️ Deadline Slayer RPG ⚔️</h1>
+  <canvas id="game" width="500" height="300"></canvas>
+  <div id="ui">XP: <span id="xp">0</span> | Level: <span id="lvl">1</span></div>
+
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+
+    // Player
+    let player = {x:50,y:150,size:20,color:"cyan",xp:0,level:1};
+
+    // Monster
+    let monster = {x:300,y:150,size:25,color:"red",hp:50,maxHp:50,alive:true};
+
+    // Input
+    let keys = {};
+    document.addEventListener("keydown",e=>keys[e.key]=true);
+    document.addEventListener("keyup",e=>keys[e.key]=false);
+
+    function movePlayer() {
+      if(keys["ArrowUp"]||keys["w"]) player.y-=2;
+      if(keys["ArrowDown"]||keys["s"]) player.y+=2;
+      if(keys["ArrowLeft"]||keys["a"]) player.x-=2;
+      if(keys["ArrowRight"]||keys["d"]) player.x+=2;
+    }
+
+    function checkCollision() {
+      if(monster.alive &&
+        Math.abs(player.x - monster.x) < 20 &&
+        Math.abs(player.y - monster.y) < 20) {
+        battle();
+      }
+    }
+
+    function battle() {
+      let choice = prompt("Battle! Attack or Quiz?");
+      if(choice && choice.toLowerCase()==="quiz"){
+        let q = prompt("What is 8+5?");
+        if(q=="13"){ alert("Correct! Critical hit!"); monster.hp-=50; }
+        else { alert("Wrong! You take damage!"); }
+      } else {
+        monster.hp-=20;
+        alert("You attack! Monster HP: "+monster.hp);
+      }
+      if(monster.hp<=0){
+        monster.alive=false;
+        player.xp+=20;
+        if(player.xp>=player.level*50){ player.level++; }
+        document.getElementById("xp").innerText=player.xp;
+        document.getElementById("lvl").innerText=player.level;
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      // player
+      ctx.fillStyle=player.color;
+      ctx.fillRect(player.x,player.y,player.size,player.size);
+      // monster
+      if(monster.alive){
+        ctx.fillStyle=monster.color;
+        ctx.fillRect(monster.x,monster.y,monster.size,monster.size);
+        ctx.fillStyle="lime";
+        ctx.fillRect(monster.x,monster.y-10,(monster.hp/monster.maxHp)*monster.size,5);
+      }
+    }
+
+    function gameLoop() {
+      movePlayer();
+      checkCollision();
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+    gameLoop();
+  </script>
+</body>
+</html>

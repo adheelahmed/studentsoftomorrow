@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Deadline Slayer ⚔️</title>
+  <style>
+    body { font-family: monospace; background:#1a1a2e; color:#fff; text-align:center; padding:20px; }
+    h1 { color:#ff4c4c; text-shadow:2px 2px #000; }
+    .monster { font-size:50px; margin:10px 0; }
+    .task-box { border:2px solid #fff; border-radius:10px; padding:10px; margin:10px auto; width:350px; background:#2c2c44; }
+    .healthbar { width:100%; height:20px; background:#444; border:1px solid #fff; border-radius:8px; overflow:hidden; margin:5px 0; }
+    .health { height:100%; background:linear-gradient(90deg,#4caf50,#2ecc71); }
+    button { margin:5px; padding:5px 12px; font-size:14px; border:none; border-radius:6px; cursor:pointer; }
+    .attack { background:#e74c3c; color:#fff; }
+    .quiz { background:#3498db; color:#fff; }
+    .attack:hover { background:#c0392b; }
+    .quiz:hover { background:#2980b9; }
+    #stats { margin:15px; }
+    #lootBag { margin-top:15px; font-size:14px; }
+  </style>
+</head>
+<body>
+  <h1>⚔️ Deadline Slayer RPG ⚔️</h1>
+  <p>Turn your tasks into monsters. Slay them, loot rewards, and level up!</p>
+
+  <form id="taskForm">
+    <input id="taskInput" placeholder="Task name">
+    <input type="date" id="deadlineInput">
+    <button type="submit">Add Task</button>
+  </form>
+
+  <div id="stats">
+    <div id="xp">XP: 0</div>
+    <div id="level">Level: 1</div>
+    <div id="streak">Streak: 0</div>
+  </div>
+
+  <div id="taskList"></div>
+  <div id="lootBag">🎁 Loot: (none yet)</div>
+
+  <script>
+    let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    let xp = parseInt(localStorage.getItem("xp") || "0");
+    let streak = parseInt(localStorage.getItem("streak") || "0");
+    let level = parseInt(localStorage.getItem("level") || "1");
+    let loot = JSON.parse(localStorage.getItem("loot") || "[]");
+
+    function saveProgress() {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      localStorage.setItem("xp", xp);
+      localStorage.setItem("streak", streak);
+      localStorage.setItem("level", level);
+      localStorage.setItem("loot", JSON.stringify(loot));
+    }
+
+    function updateStats() {
+      document.getElementById("xp").innerText = "XP: " + xp;
+      document.getElementById("level").innerText = "Level: " + level;
+      document.getElementById("streak").innerText = "Streak: " + streak;
+      document.getElementById("lootBag").innerText = "🎁 Loot: " + (loot.length ? loot.join(", ") : "(none yet)");
+    }
+
+    function checkLevelUp() {
+      let needed = level * 100;
+      if (xp >= needed) {
+        level++;
+        alert("🔥 Level Up! You are now Level " + level);
+      }
+    }
+
+    function hpFromDeadline(dateStr) {
+      let now = new Date();
+      let due = new Date(dateStr);
+      let daysLeft = Math.max(1, Math.ceil((due - now)/(1000*60*60*24)));
+      return Math.min(300, Math.max(40, daysLeft*20));
+    }
+
+    function randomLoot() {
+      let items = ["Sword of Coffee ☕", "Crown of Deadlines 👑", "Dark Hoodie 🖤", "Energy Potion ⚡", "Shield of Chill 🛡️"];
+      if (Math.random() < 0.5) {
+        let drop = items[Math.floor(Math.random()*items.length)];
+        loot.push(drop);
+        alert("🎉 Loot drop: " + drop);
+      }
+    }
+
+    function renderTasks() {
+      let list = document.getElementById("taskList");
+      list.innerHTML = "";
+      tasks.forEach((t,i) => {
+        let box = document.createElement("div");
+        box.className = "task-box";
+        let monsterEmoji = t.hp > 0 ? t.isBoss ? "🐉" : "👹" : "💀";
+        box.innerHTML = `
+          <div class="monster">${monsterEmoji}</div>
+          <div><b>${t.title}</b> (Due: ${t.deadline}) ${t.isBoss ? "<span>🔥 BOSS</span>" : ""}</div>
+          <div class="healthbar"><div class="health" style="width:${(t.hp/t.maxHp)*100}%"></div></div>
+          <div>HP: ${t.hp}/${t.maxHp}</div>
+        `;
+        if (t.hp > 0) {
+          let atkBtn = document.createElement("button");
+          atkBtn.className = "attack";
+          atkBtn.innerText = "⚔️ Quick Attack";
+          atkBtn.onclick = () => attack(i);
+          let quizBtn = document.createElement("button");
+          quizBtn.className = "quiz";
+          quizBtn.innerText = "🧠 Challenge";
+          quizBtn.onclick = () => challenge(i);
+          box.appendChild(atkBtn);
+          box.appendChild(quizBtn);
+        } else {
+          let doneBtn = document.createElement("button");
+          doneBtn.innerText = "✅ Remove";
+          doneBtn.onclick = () => { tasks.splice(i,1); saveProgress(); renderTasks(); };
+          box.appendChild(doneBtn);
+        }
+        list.appendChild(box);
+      });
+      updateStats();
+    }
+
+    function attack(index) {
+      let dmg = tasks[index].isBoss ? 10 : 20;
+      tasks[index].hp -= dmg;
+      if (tasks[index].hp <= 0) {
+        taskDefeated(index, tasks[index].isBoss ? 50 : 20);
+      }
+      saveProgress(); renderTasks();
+    }
+
+    function challenge(index) {
+      if (Math.random() < 0.5) {
+        let q = prompt("Math Time: What is 7 * 6?");
+        if (q == "42") {
+          alert("Correct! Critical Hit!");
+          tasks[index].hp -= 50;
+        } else {
+          alert("Wrong! Monster laughs 😈");
+          tasks[index].hp -= 5;
+        }
+      } else {
+        alert("Reaction Test! Click OK as fast as possible!");
+        let start = Date.now();
+        setTimeout(() => {
+          let reaction = Date.now()-start;
+          if (reaction < 1000) {
+            alert("⚡ Fast! Big damage!");
+            tasks[index].hp -= 40;
+          } else {
+            alert("Too slow... 😬 Small damage");
+            tasks[index].hp -= 10;
+          }
+          if (tasks[index].hp <= 0) {
+            taskDefeated(index, tasks[index].isBoss ? 70 : 30);
+          }
+          saveProgress(); renderTasks();
+        }, Math.random()*2000+500);
+        return;
+      }
+      if (tasks[index].hp <= 0) {
+        taskDefeated(index, tasks[index].isBoss ? 70 : 30);
+      }
+      saveProgress(); renderTasks();
+    }
+
+    function taskDefeated(index, rewardXP) {
+      tasks[index].hp = 0;
+      xp += rewardXP;
+      streak++;
+      randomLoot();
+      checkLevelUp();
+    }
+
+    document.getElementById("taskForm").addEventListener("submit", e => {
+      e.preventDefault();
+      let title = document.getElementById("taskInput").value;
+      let deadline = document.getElementById("deadlineInput").value;
+      if (!title || !deadline) return alert("Enter both task and deadline, chaos goblin!");
+      let hp = hpFromDeadline(deadline);
+      let isBoss = (streak > 0 && streak % 5 === 0);
+      if (isBoss) { hp *= 2; }
+      tasks.push({title, deadline, hp, maxHp: hp, isBoss});
+      saveProgress();
+      renderTasks();
+      document.getElementById("taskInput").value="";
+      document.getElementById("deadlineInput").value="";
+    });
+
+    renderTasks();
+  </script>
+</body>
+</html>

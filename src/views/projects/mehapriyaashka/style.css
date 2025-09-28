@@ -1,0 +1,25 @@
+body {
+  margin: 0;
+  background: #111;
+  color: #fff;
+  text-align: center;
+  font-family: monospace;
+}
+
+h1 {
+  margin: 10px 0;
+  color: #ff4c4c;
+  text-shadow: 2px 2px #000;
+}
+
+canvas {
+  background: #222;
+  display: block;
+  margin: 20px auto;
+  border: 2px solid #fff;
+}
+
+#ui {
+  margin-top: 10px;
+  font-size: 18px;
+}
