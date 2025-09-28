@@ -1,0 +1,50 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #1c1c1c;
+  color: white;
+  text-align: center;
+}
+
+#game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.player {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pile {
+  width: 100px;
+  height: 150px;
+  border: 2px solid white;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #444;
+  font-weight: bold;
+  color: white;
+}
+
+.card {
+  width: 80px;
+  height: 120px;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.red { background: red; color: white; }
+.green { background: green; color: white; }
+.blue { background: blue; color: white; }
+.yellow { background: gold; color: black; }
