@@ -1,0 +1,8 @@
+{
+  "studentName": "nandana varsha anagha",
+  "profession": "student", 
+  "projectTitle": "daily planner",
+  "description": "Building Students of Tomorrow (S O T) using Node.js — a platform to showcase student projects, encourage collaboration, and make free learning accessible to everyone.",
+  "tools": ["Node.js", "EJS"],
+  "isUrl": "/"
+}

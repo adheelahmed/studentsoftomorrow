@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daily Planner App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>📅 Daily Planner</h1>
+    <p>Organize your day and host on GitHub Pages</p>
+  </header>
+
+  <div class="container">
+    <div class="row">
+      <input type="text" id="taskInput" placeholder="Enter task..."/>
+      <select id="timeSelect">
+        <option value="Morning">🌅 Morning</option>
+        <option value="Afternoon">☀️ Afternoon</option>
+        <option value="Evening">🌇 Evening</option>
+        <option value="Night">🌙 Night</option>
+      </select>
+      <button id="addTask">Add</button>
+    </div>
+
+    <div id="taskList"></div>
+
+    <footer>
+      <button id="githubPagesBtn">🚀 Deploy to GitHub Pages</button><br/>
+      Tasks are saved in your browser (localStorage).
+    </footer>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
