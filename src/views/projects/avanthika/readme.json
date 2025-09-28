@@ -3,6 +3,7 @@
   "profession": "students", 
   "projectTitle": "U N O",
   "description": "pani illathe irikumbo time passing.",
-  "tools": ["Node.js", "EJS"],
-  "isUrl": "/"
+  "tools": ["HTML","GAME"],
+  "isUrl": false
+
 }
