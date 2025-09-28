@@ -1,0 +1,9 @@
+{
+  "studentName": "Maya",
+  "profession": "IT", 
+  "projectTitle": "Fruit Ninja Clone",
+  "description": "A fast-paced Fruit Ninja–style browser game where players slice juicy fruits mid-air, rack up combos, and dodge bombs. Built in HTML, CSS, and JavaScript for quick, addictive fun right in the browser.",
+  "tools": ["HTML","GAME"],
+  "isUrl": false
+
+}
