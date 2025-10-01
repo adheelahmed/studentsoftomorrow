@@ -1,8 +1,9 @@
 {
-  "studentName": "emberskye",
+  "studentName": "Noona, Abhirami, Zaharah",
   "profession": "Student",
   "projectTitle": "Word Chain Game Pro",
   "description": "A fast-paced word chain browser game where players enter words starting with the last letter of the previous one. Compete against the computer, score points, and race against the countdown timer to keep the chain alive.",
   "tools": ["HTML", "JavaScript", "GAME"],
   "isUrl": false
 }
+
