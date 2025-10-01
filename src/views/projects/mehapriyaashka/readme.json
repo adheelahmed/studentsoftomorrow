@@ -1,8 +1,9 @@
 {
-  "studentName": "Meha, Priya, Ashka",
+  "studentName": "Meha, Sreepriya, Ashka",
   "profession": "Students",
   "projectTitle": "Deadline Slayer RPG",
   "description": "An HTML5 RPG where players battle monsters while racing against deadlines. Move your character, fight using attacks or brainy quizzes, gain XP, and level up in this retro-styled browser adventure.",
   "tools": ["HTML", "CSS", "JavaScript", "GAME"],
   "isUrl": false
 }
+
